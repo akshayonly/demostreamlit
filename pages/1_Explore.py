@@ -8,18 +8,18 @@ from pathlib import Path
 st.set_page_config(layout="wide")
 st.error('Under Development')
 
-# Define file paths
-data_file = Path('https://github.com/akshayonly/demostreamlit/blob/main/data/data.csv')
-metadata_file = Path('https://media.githubusercontent.com/media/akshayonly/demostreamlit/refs/heads/main/data/metadata.csv')
-seqs_file = Path('https://github.com/akshayonly/demostreamlit/blob/main/data/nuo_searched_seqs.faa')
+# Corrected file paths using GitHub Raw URLs
+data_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/data.csv"
+metadata_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/metadata.csv"
+seqs_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/nuo_searched_seqs.faa"
 
-# Check if required files exist
-if not data_file.exists() or not metadata_file.exists() or not seqs_file.exists():
-    st.error("One or more required files are missing. Please check the file paths.")
+# Check if required files exist (Skip local path existence check since we're using URLs)
+try:
+    data = pd.read_csv(data_file)
+    metadata = pd.read_csv(metadata_file)
+except Exception as e:
+    st.error(f"Error loading data files: {e}")
     st.stop()
-
-# Load the main dataset
-data = pd.read_csv(data_file)
 
 # Title of the web app
 st.title('NuoHMMER Results')
@@ -76,33 +76,28 @@ else:
 
     # Display Subunit Sequences if checkbox is selected
     if search_option == 'NCBI Accession Number' and st.checkbox('Display Subunit(s) Sequences'):
-        metadata = pd.read_csv(metadata_file)
         sequence_data = metadata[metadata['Accession'] == selected_value][['ProteinAccession', 'Subunit']]
         prot_accessions = sequence_data.set_index('ProteinAccession')['Subunit'].to_dict()
 
-        combined_output = []
-        for record in SeqIO.parse(seqs_file, 'fasta'):
-            if record.id in prot_accessions:
-                cleaned_sequence = str(record.seq).replace('*', '')
-                seq_record = SeqRecord(
-                    seq=cleaned_sequence,
-                    id=record.id,
-                    description=record.description
-                )
-                combined_output.append(f">{prot_accessions[record.id]} {seq_record.description}\n{seq_record.seq}")
+        # Read sequence file from URL
+        try:
+            import requests
+            seqs_response = requests.get(seqs_file)
+            seqs_content = seqs_response.text
 
-        if combined_output:
-            st.subheader('Subunit Sequences')
-            st.text("\n".join(combined_output))
+            combined_output = []
+            for record in SeqIO.parse(seqs_content.splitlines(), 'fasta'):
+                if record.id in prot_accessions:
+                    cleaned_sequence = str(record.seq).replace('*', '')
+                    seq_record = SeqRecord(
+                        seq=cleaned_sequence,
+                        id=record.id,
+                        description=record.description
+                    )
+                    combined_output.append(f">{prot_accessions[record.id]} {seq_record.description}\n{seq_record.seq}")
 
-# Hide the Streamlit toolbar
-# st.markdown(
-#     """
-#     <style>
-#     [data-testid="stElementToolbar"] {
-#         display: none;
-#     }
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-# )
+            if combined_output:
+                st.subheader('Subunit Sequences')
+                st.text("\n".join(combined_output))
+        except Exception as e:
+            st.error(f"Error loading sequence file: {e}")
