@@ -15,8 +15,8 @@ seqs_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/dat
 
 # Check if required files exist (Skip local path existence check since we're using URLs)
 try:
-    data = pd.read_csv(data_file)
-    metadata = pd.read_csv(metadata_file)
+    data = pd.read_csv(data_file, encoding='utf-8')
+    metadata = pd.read_csv(metadata_file, encoding='utf-8')
 except Exception as e:
     st.error(f"Error loading data files: {e}")
     st.stop()
