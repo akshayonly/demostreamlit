@@ -11,7 +11,7 @@ st.error('Under Development')
 # Corrected file paths using GitHub Raw URLs
 data_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/data.csv"
 metadata_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/metadata.csv"
-seqs_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/nuo_searched_seqs.faa"
+# seqs_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/nuo_searched_seqs.faa"
 
 # Check if required files exist (Skip local path existence check since we're using URLs)
 try:
