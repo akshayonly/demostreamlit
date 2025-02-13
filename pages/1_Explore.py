@@ -9,9 +9,9 @@ st.set_page_config(layout="wide")
 st.error('Under Development')
 
 # Define file paths
-data_file = Path('/Users/akshayonly/Work/Webapp/Practice/data.csv')
-metadata_file = Path('/Users/akshayonly/Work/Webapp/Practice/metadata.csv')
-seqs_file = Path('/Users/akshayonly/Work/Webapp/Practice/nuo_searched_seqs.faa')
+data_file = Path('https://github.com/akshayonly/demostreamlit/blob/main/data/data.csv')
+metadata_file = Path('https://media.githubusercontent.com/media/akshayonly/demostreamlit/refs/heads/main/data/metadata.csv')
+seqs_file = Path('https://github.com/akshayonly/demostreamlit/blob/main/data/nuo_searched_seqs.faa')
 
 # Check if required files exist
 if not data_file.exists() or not metadata_file.exists() or not seqs_file.exists():
