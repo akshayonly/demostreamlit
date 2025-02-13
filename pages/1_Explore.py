@@ -96,13 +96,13 @@ else:
             st.text("\n".join(combined_output))
 
 # Hide the Streamlit toolbar
-st.markdown(
-    """
-    <style>
-    [data-testid="stElementToolbar"] {
-        display: none;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# st.markdown(
+#     """
+#     <style>
+#     [data-testid="stElementToolbar"] {
+#         display: none;
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True
+# )
