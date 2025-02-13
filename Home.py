@@ -31,5 +31,5 @@ This app provides an interactive platform for researchers to explore the results
 
 ### Explore Our Results
 
-Use the navigation menu to explore our results, examine the distribution and diversity of Complex I subunits across different species, and visualize the phylogenetic trees. Dive into the detailed figures and analyses to gain insights into the evolutionary patterns and unique characteristics of Complex I among diverse prokaryotic lineages.
+Use the navigation menu to explore our results, examine the distribution and diversity of Complex I subunits across different species.
 """)
