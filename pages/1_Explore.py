@@ -22,8 +22,6 @@ except Exception as e:
     st.error(f"Error loading data files: {e}")
     st.stop()
 
-# Title of the web app
-st.title('NuoHMMER Results')
 
 # Search Options using Radio Button
 search_option = st.radio(
