@@ -46,6 +46,6 @@ For inquiries, please contact:
 Email: akishirsath@gmail.com
 
 ### GitHub Repository
-Explore the code and data:
+Workflow and Pipeline Code:
 [GitHub Repository Link](https://github.com/Anand-Research-Group/complex-I)
 """)
