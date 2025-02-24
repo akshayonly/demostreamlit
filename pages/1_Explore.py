@@ -17,6 +17,8 @@ metadata_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main
 # Check if required files exist (Skip local path existence check since we're using URLs)
 try:
     data = pd.read_csv(data_file, encoding='utf-8')
+    data.drop(columns=['Genus', 'Cluster'], inplace=True)
+    
     metadata = pd.read_csv(metadata_file, encoding='utf-8')
 except Exception as e:
     st.error(f"Error loading data files: {e}")
