@@ -20,13 +20,13 @@ This app provides an interactive platform for researchers to explore the results
   Coding sequences (CDS) were screened to identify genes encoding Complex I subunits, supplemented by additional protein sequences from the [InterPro](https://www.ebi.ac.uk/interpro/) database. This combined dataset was used to build Hidden Markov Model (HMM) profiles specific to each subunit.
 
 - **Construction of HMM Profiles**:
-  We employed **MMSeq2** for sequence clustering (at a 85% identity threshold) and [MAFFT](https://mafft.cbrc.jp/alignment/software/) for alignment. HMM profiles were then constructed using [HMMER3](http://hmmer.org/) for alignment, with subunit profiles developed including bacterial and archaeal sequences.
+  We employed [MMSeq2](https://github.com/soedinglab/MMseqs2) for sequence clustering (at a 85% identity threshold) and [MAFFT](https://mafft.cbrc.jp/alignment/software/) for alignment. HMM profiles were then constructed using [HMMER3](http://hmmer.org/) for alignment, with subunit profiles developed including bacterial and archaeal sequences.
 
 - **Identification of Complex I Subunits**:
   Proteomes from the genomes were generated using [Prodigal](https://github.com/hyattpd/Prodigal) and searched for Complex I subunits using the developed HMM profiles.
 
 - **Species Classification**:
-  We utilized [TaxonKit](https://bioinf.shenwei.me/taxonkit/) for species classification and curated additional physiological metadata from the **BacDive** and **IMG-MER** database and literature.
+  We utilized [TaxonKit](https://bioinf.shenwei.me/taxonkit/) for species classification and curated additional physiological metadata from the [BacDive](https://bacdive.dsmz.de/) database and literature.
 
 - **Phylogenetic Analysis of Complex I Variants**:
   A phylogenetic tree of concatenated Complex I subunit sequences was generated using [IQ-Tree](http://www.iqtree.org/), employing the **Le-Gascuel 2008 model** to explore phylogenetic relationships.
