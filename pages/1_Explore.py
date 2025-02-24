@@ -6,7 +6,8 @@ from pathlib import Path
 
 # Set the page layout to wide
 st.set_page_config(layout="wide")
-st.error('Under Development')
+st.title("NuoHMMER Web v1b")
+st.info('This site is actively being improved, and new features may be added. Core functionalities are stable for research use.')
 
 # Corrected file paths using GitHub Raw URLs
 data_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/data.csv"
