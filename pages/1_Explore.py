@@ -5,8 +5,9 @@ from Bio.SeqRecord import SeqRecord
 from pathlib import Path
 
 # Set the page layout to wide
+st.title("NuoHMMER Web v1b")
+st.info('This site is actively being improved, and new features may be added. Core functionalities are stable for research use.')
 st.set_page_config(layout="wide")
-st.error('Under Development')
 
 # Corrected file paths using GitHub Raw URLs
 data_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/main/data/data.csv"
@@ -20,9 +21,6 @@ try:
 except Exception as e:
     st.error(f"Error loading data files: {e}")
     st.stop()
-
-# Title of the web app
-st.title('NuoHMMER Results')
 
 # Search Options using Radio Button
 search_option = st.radio(
