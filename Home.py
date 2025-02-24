@@ -1,6 +1,8 @@
 import streamlit as st
 
 # Title of the app
+st.set_page_config(page_title="NuoHMMER")
+
 st.title("NuoHMMER Web v1b")
 st.info('This site is actively being improved, and new features may be added. Core functionalities are stable for research use.')
 
