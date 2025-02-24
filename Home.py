@@ -1,9 +1,8 @@
 import streamlit as st
 
-st.error('Under Development')
-
 # Title of the app
-st.title("NuoHMMER")
+st.title("NuoHMMER Web v1b")
+st.info('This site is actively being improved, and new features may be added. Core functionalities are stable for research use.')
 
 # Welcome text using Markdown
 st.markdown("""
