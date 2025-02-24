@@ -22,22 +22,17 @@ except Exception as e:
     st.error(f"Error loading data files: {e}")
     st.stop()
 
-
-# Search Options using Radio Button
+# Search Options using Radio Button (Genus option removed)
 search_option = st.radio(
     'Choose a search criteria:',
-    ['Genus', 'NCBI Accession Number', 'Species']
+    ['NCBI Accession Number', 'Species']
 )
 
 # Input and filtering based on search criteria
 selected_value = None
 filtered_data = pd.DataFrame()
 
-if search_option == 'Genus':
-    selected_value = st.selectbox('Choose a Genus or type to search', sorted(data['Genus'].unique()))
-    filtered_data = data[data['Genus'] == selected_value]
-
-elif search_option == 'NCBI Accession Number':
+if search_option == 'NCBI Accession Number':
     selected_value = st.selectbox('Choose an Accession Number or type to search', sorted(data['Accession'].unique()))
     filtered_data = data[data['Accession'] == selected_value]
 
@@ -72,31 +67,3 @@ else:
 
     st.subheader('Species without Complex I Subunit(s)')
     st.dataframe(species_without_complex_i, use_container_width=True)
-
-    # Display Subunit Sequences if checkbox is selected
-    # if search_option == 'NCBI Accession Number' and st.checkbox('Display Subunit(s) Sequences'):
-    #     sequence_data = metadata[metadata['Accession'] == selected_value][['ProteinAccession', 'Subunit']]
-    #     prot_accessions = sequence_data.set_index('ProteinAccession')['Subunit'].to_dict()
-
-    #     # Read sequence file from URL
-    #     try:
-    #         import requests
-    #         seqs_response = requests.get(seqs_file)
-    #         seqs_content = seqs_response.text
-
-    #         combined_output = []
-    #         for record in SeqIO.parse(seqs_content.splitlines(), 'fasta'):
-    #             if record.id in prot_accessions:
-    #                 cleaned_sequence = str(record.seq).replace('*', '')
-    #                 seq_record = SeqRecord(
-    #                     seq=cleaned_sequence,
-    #                     id=record.id,
-    #                     description=record.description
-    #                 )
-    #                 combined_output.append(f">{prot_accessions[record.id]} {seq_record.description}\n{seq_record.seq}")
-
-    #         if combined_output:
-    #             st.subheader('Subunit Sequences')
-    #             st.text("\n".join(combined_output))
-    #     except Exception as e:
-    #         st.error(f"Error loading sequence file: {e}")
