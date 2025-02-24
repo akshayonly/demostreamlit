@@ -5,7 +5,8 @@ from Bio.SeqRecord import SeqRecord
 from pathlib import Path
 
 # Set the page layout to wide
-# st.set_page_config(layout="wide")
+st.set_page_config(page_title="Explore")
+
 st.title("NuoHMMER Web v1b")
 st.info('This site is actively being improved, and new features may be added. Core functionalities are stable for research use.')
 
