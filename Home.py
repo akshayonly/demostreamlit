@@ -16,7 +16,7 @@ with st.expander("Info", expanded=True):
 # Load Data (Optimized with Caching)
 @st.cache_data
 def load_data():
-    data_file = "/Users/akshayonly/Work/04-Complex-I/Scripts/main/streamlit/data/data.csv"
+    data_file = "https://raw.githubusercontent.com/akshayonly/demostreamlit/refs/heads/main/data/data.csv"
     return pd.read_csv(data_file)
 
 # Tabs
