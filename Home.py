@@ -1,52 +1,109 @@
 import streamlit as st
+import pandas as pd
+import plotly.express as px
 
-# Title of the app
-st.set_page_config(page_title="NuoHMMER")
-
+# Page Configuration
+st.set_page_config(page_title="Explore", layout='wide')
 st.title("NuoHMMER Web v1b")
-st.info('This site is actively being improved, and new features may be added. Core functionalities are stable for research use.')
 
-# Welcome text using Markdown
-st.markdown("""
-### Overview
+# Overview Section
+with st.expander("Info", expanded=True):
+    st.markdown("""
+    **NuoHMMER Web** is an interactive platform to explore the distribution and diversity of Complex I subunits 
+    across prokaryotic genomes. The dataset includes over 45,000 genomes, analyzing Complex I subunits presence and its variations.
+    """)
 
-This app provides an interactive platform for researchers to explore the results of our comprehensive study on the distribution and diversity of Complex I (NADH:ubiquinone oxidoreductase) across prokaryotic genomes. Our dataset includes over 45,000 genomes, and we have performed extensive analyses to investigate the presence, variation, and phylogenetic relationships of Complex I subunits in bacteria and archaea.
+# Load Data (Optimized with Caching)
+@st.cache_data
+def load_data():
+    data_file = "/Users/akshayonly/Work/04-Complex-I/Scripts/main/streamlit/data/data.csv"
+    return pd.read_csv(data_file)
 
-### Key Steps in Our Study:
+# Tabs
+tab1, tab2 = st.tabs(["Overview", "Explore"])
 
-- **Genome Selection and Curation**:
-  We selected **47,278 prokaryotic genomes** from the [NCBI Genome database](https://ftp.ncbi.nih.gov/genomes/GENOME_REPORTS/) (September 2024), encompassing **10,608 bacterial species** and **431 archaeal species**. The dataset focused on genomes at the "Complete Genomes" or "Chromosomes" level.
+# Colors for the Pie Chart
+colors = ["#78C679", "#FEC44F", "#FEE08B", "#57A4E3", "#D0D1E6", "#E41A1C"]
 
-- **Extraction and Analysis of Complex I Subunits**:
-  Coding sequences (CDS) were screened to identify genes encoding Complex I subunits, supplemented by additional protein sequences from the [InterPro](https://www.ebi.ac.uk/interpro/) database. This combined dataset was used to build Hidden Markov Model (HMM) profiles specific to each subunit.
+# **Tab 1: Overview**
+with tab1:
+    df = pd.DataFrame({
+        "Nuo subunit status": [
+            "Complete C-I", "Complete C-I (CD fused)", "Complete C-I (BCD fused)",
+            "C-I like (EF/EFG missing)", "Incomplete C-I", "Nuo subunits absent"
+        ],
+        "Species": [4260, 1361, 8, 393, 1948, 3072]
+    })
 
-- **Construction of HMM Profiles**:
-  We employed [MMSeq2](https://github.com/soedinglab/MMseqs2) for sequence clustering (at a 85% identity threshold) and [MAFFT](https://mafft.cbrc.jp/alignment/software/) for alignment. HMM profiles were then constructed using [HMMER3](http://hmmer.org/) for alignment, with subunit profiles developed including bacterial and archaeal sequences.
+    fig = px.pie(df, names="Nuo subunit status", values="Species", title="Species Distribution",
+                 color="Nuo subunit status", color_discrete_sequence=colors)
+    fig.update_traces(textposition='outside', textinfo='label+percent')
+    fig.update_layout(showlegend=False)
 
-- **Identification of Complex I Subunits**:
-  Proteomes from the genomes were generated using [Prodigal](https://github.com/hyattpd/Prodigal) and searched for Complex I subunits using the developed HMM profiles.
+    st.plotly_chart(fig)
 
-- **Species Classification**:
-  We utilized [TaxonKit](https://bioinf.shenwei.me/taxonkit/) for species classification and curated additional physiological metadata from the [BacDive](https://bacdive.dsmz.de/) database and literature.
+# **Tab 2: Explore**
+with tab2:
+    data = load_data()
 
-- **Phylogenetic Analysis of Complex I Variants**:
-  A phylogenetic tree of concatenated Complex I subunit sequences was generated using [IQ-Tree](http://www.iqtree.org/), employing the **Le-Gascuel 2008 model** to explore phylogenetic relationships.
+    # Column Selection
+    subunits = ['NuoA', 'NuoB', 'NuoBCD', 'NuoC', 'NuoCD', 'NuoD', 'NuoE', 'NuoF', 
+                'NuoG', 'NuoH', 'NuoI', 'NuoJ', 'NuoK', 'NuoL', 'NuoM', 'NuoN']
+    
+    selected_columns = ['Assembly Accession', 'Reference', 'Accession', 'Replicon', 'Variation', 'Count'] + subunits
 
-### Explore Our Results
+    # Species Selection
+    selected_value = st.selectbox("Choose Species:", sorted(data['Species'].dropna().astype(str).unique()))
 
-Use the navigation menu to explore our results, examine the distribution and diversity of Complex I subunits across different species.
-""")
+    # Filtering Data
+    filtered_data = data[data['Species'] == selected_value].reset_index(drop=True)
 
-# Footer Section
-st.markdown("""
----
+    if filtered_data.empty:
+        st.warning(f"No data available for '{selected_value}'.")
+    else:
+        # Extract Taxonomy Information
+        taxonomy_info = filtered_data[["Superkingdom", "Phylum", "Class", "Family"]].iloc[0].to_dict()
 
-### Contact
-For inquiries, please contact:
-**Akshay Shirsath**
-Email: akishirsath@gmail.com
+        col1, col2, col3 = st.columns(3)
+        for col, (label, value) in zip([col1, col2, col3], taxonomy_info.items()):
+            col.markdown(f"""
+                <div style="font-size:14px; font-weight:normal; text-align:left;">
+                    {label}<br><span style="font-size:16px; font-weight:bold; color:#27ae60;">{value}</span>
+                </div>
+            """, unsafe_allow_html=True)
 
-### GitHub Repository
-Workflow and Pipeline Code:
-[GitHub Repository Link](https://github.com/Anand-Research-Group/complex-I)
-""")
+        st.markdown("---")
+
+        # Complex I Analysis
+        total_genomes = filtered_data['GenomeFile'].nunique()
+        species_with_complex_i = filtered_data[filtered_data['Variation'] != 'No Complex I']['GenomeFile'].nunique()
+        species_without_complex_i = total_genomes - species_with_complex_i
+
+        col1, col2, col3 = st.columns(3)
+        col1.metric(label="Genomes Records", value=f"{total_genomes}")
+        col2.metric(label="Genomes with Complex I subunit(s)", value=f"{species_with_complex_i}")
+        col3.metric(label="Genomes without Complex I subunit(s)", value=f"{species_without_complex_i}")
+
+        st.markdown("---")
+
+        # Check for Functioning Complex I
+        species_variations = set(filtered_data['Variation'].unique())
+        functioning_variations = {'Nuo12', 'Nuo13', 'Nuo14', 'Nuo14-EF', 'Nuo14-EFG'}
+        present_variations = functioning_variations & species_variations
+
+        functioning_ci = "Present" if present_variations else "Absent"
+
+        col1, col2, col3 = st.columns(3)
+        col1.metric(label="Functioning Complex I", value=functioning_ci)
+        col2.metric(label="Complex I Variation", value="; ".join(present_variations) if present_variations else "None")
+        col3.metric(label="Total Subunits", value=filtered_data[subunits].sum().ge(1).sum())
+
+        st.markdown("---")
+
+        # Display Data Table
+        if st.checkbox(f'Display {total_genomes} records'):
+            st.dataframe(filtered_data[selected_columns], use_container_width=True)
+
+# Footer
+st.markdown("---")
+st.caption("Developed at TIFR Mumbai by [Anand Research Group](https://www.anandresearch.com/) ", unsafe_allow_html=True)
