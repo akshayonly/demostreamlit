@@ -32,7 +32,7 @@ with tab1:
             "Complete C-I", "Complete C-I (CD fused)", "Complete C-I (BCD fused)",
             "C-I like (EF/EFG missing)", "Incomplete C-I", "Nuo subunits absent"
         ],
-        "Species": [4260, 1361, 8, 393, 1948, 3072]
+        "Species": [3884, 1363, 11, 415, 2171, 3211]
     })
 
     fig = px.pie(df, names="Nuo subunit status", values="Species", title="Species Distribution",
