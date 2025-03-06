@@ -75,8 +75,8 @@ with tab2:
         st.markdown("---")
 
         # Complex I Analysis
-        total_genomes = filtered_data['GenomeFile'].nunique()
-        species_with_complex_i = filtered_data[filtered_data['Variation'] != 'No Complex I']['GenomeFile'].nunique()
+        total_genomes = filtered_data['Assembly Accession'].nunique()
+        species_with_complex_i = filtered_data[filtered_data['Variation'] != 'No Complex I']['Assembly Accession'].nunique()
         species_without_complex_i = total_genomes - species_with_complex_i
 
         col1, col2, col3 = st.columns(3)
